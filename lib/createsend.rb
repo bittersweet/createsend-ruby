@@ -50,6 +50,7 @@ module CreateSend
   # Provides high level CreateSend functionality/data you'll probably need.
   class CreateSend
     include HTTParty
+    ssl_ca_file '/etc/ssl/certs/ca-certificates.crt'
 
     class Parser::DealWithCreateSendInvalidJson < HTTParty::Parser
       # The createsend API returns an ID as a string when a 201 Created
