@@ -23,7 +23,7 @@ module CreateSend
     def api_key(api_key=nil)
       r = CreateSend.api_key api_key
     end
-    
+
     def base_uri(uri)
       r = CreateSend.base_uri uri
     end
@@ -50,7 +50,7 @@ module CreateSend
   # Provides high level CreateSend functionality/data you'll probably need.
   class CreateSend
     include HTTParty
-    
+
     class Parser::DealWithCreateSendInvalidJson < HTTParty::Parser
       # The createsend API returns an ID as a string when a 201 Created
       # response is returned. Unfortunately this is invalid json.
@@ -65,8 +65,8 @@ module CreateSend
     parser Parser::DealWithCreateSendInvalidJson
     @@base_uri = "https://api.createsend.com/api/v3"
     @@api_key = ""
-    headers({ 
-      'User-Agent' => "createsend-ruby-#{VERSION}", 
+    headers({
+      'User-Agent' => "createsend-ruby-#{VERSION}",
       'Content-Type' => 'application/json; charset=utf-8',
       'Accept-Encoding' => 'gzip, deflate' })
     base_uri @@base_uri
@@ -80,7 +80,7 @@ module CreateSend
     end
 
     # Gets your CreateSend API key, given your site url, username and password.
-    def apikey(site_url, username, password) 
+    def apikey(site_url, username, password)
       site_url = CGI.escape(site_url)
       self.class.basic_auth username, password
       response = CreateSend.get("/apikey.json?SiteUrl=#{site_url}")
@@ -112,18 +112,18 @@ module CreateSend
       response = CreateSend.get('/timezones.json')
       response.parsed_response
     end
-    
+
     # Gets the administrators
     def administrators
       response = CreateSend.get('/admins.json')
       response.map{|item| Hashie::Mash.new(item)}
     end
-    
+
     def get_primary_contact
       response = CreateSend.get('/primarycontact.json')
       Hashie::Mash.new(response)
     end
-    
+
     def set_primary_contact(email)
       options = { :query => { :email => email } }
       response = CreateSend.put("/primarycontact.json", options)
